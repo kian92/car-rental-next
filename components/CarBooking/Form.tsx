@@ -1,8 +1,10 @@
 import { createBooking, getStoreLocations } from '@/app/services';
-import React, { useEffect, useState } from 'react'
+import { BookCreatedFlagContext } from '@/context/BookCreatedFlagContext';
+import React, { useContext, useEffect, useState } from 'react'
 
 const Form = ({car}: any) => {
     const [storeLocation, setStoreLocation] = useState<any>([]);
+    const {showToastMsg, setShowToastMsg} = useContext(BookCreatedFlagContext);
     const [formValue, setFormValue] = useState({
         location:'',
         pickUpDate:'',
@@ -41,13 +43,11 @@ const Form = ({car}: any) => {
     }
 
     const handleSubmit = async() => {
-        console.log(formValue);
+        // console.log(formValue);
         const res = await createBooking(formValue);
-        console.log(res);
-        // if(resp)
-        // {
-        //   setShowToastMsg(true);
-        // }
+        if(res) {
+          setShowToastMsg(true);
+        }
       }
 
   return (
