@@ -1,17 +1,54 @@
-import { getStoreLocations } from '@/app/services';
+import { createBooking, getStoreLocations } from '@/app/services';
 import React, { useEffect, useState } from 'react'
 
 const Form = ({car}: any) => {
     const [storeLocation, setStoreLocation] = useState<any>([]);
+    const [formValue, setFormValue] = useState({
+        location:'',
+        pickUpDate:'',
+        dropOffDate:'',
+        pickUpTime:'',
+        dropOffTime:'',
+        contactNumber:'',
+        userName:'John Doe',
+        carId: ""
+    });
+    const today: any = new Date();
 
     useEffect(() => {
         getStoreLocationAPI();
-      }, []);
+    }, []);
+    
+    useEffect(() => {
+        if (car) {
+          setFormValue({
+            ...formValue,
+            carId: car.id
+          });
+        }
+    },[car]);
 
     const getStoreLocationAPI = async () => {
         const result: any = await getStoreLocations();
         setStoreLocation(result?.storesLocations);
     };
+
+    const handleChange = (event:any) => {
+        setFormValue({
+          ...formValue,
+          [event.target.name]:event.target.value
+        });
+    }
+
+    const handleSubmit = async() => {
+        console.log(formValue);
+        const res = await createBooking(formValue);
+        console.log(res);
+        // if(resp)
+        // {
+        //   setShowToastMsg(true);
+        // }
+      }
 
   return (
     <div>
@@ -20,7 +57,7 @@ const Form = ({car}: any) => {
         <select className="select 
         select-bordered w-full max-w-lg"
         name="location" 
-        // onChange={handleChange}
+        onChange={handleChange}
        >
           <option disabled selected>
             PickUp Location?
@@ -36,8 +73,8 @@ const Form = ({car}: any) => {
           <label className="text-gray-400">Pick Up Date</label>
           <input
             type="date"
-            // min={today}
-            // onChange={handleChange}
+            min={today}
+            onChange={handleChange}
             placeholder="Type here"
             name="pickUpDate"
             className="input input-bordered w-full max-w-lg"
@@ -47,9 +84,9 @@ const Form = ({car}: any) => {
           <label className="text-gray-400">Drop Off Date</label>
           <input
             type="date"
-            // onChange={handleChange}
+            onChange={handleChange}
             placeholder="Type here"
-                name="dropOffDate"
+            name="dropOffDate"
             className="input input-bordered w-full max-w-lg"
           />
         </div>
@@ -59,7 +96,7 @@ const Form = ({car}: any) => {
           <label className="text-gray-400">Pick Up Time</label>
           <input
             type="time"
-            // onChange={handleChange}
+            onChange={handleChange}
             name="pickUpTime"
             placeholder="Type here"
             className="input input-bordered w-full max-w-lg"
@@ -70,7 +107,7 @@ const Form = ({car}: any) => {
           <input
             type="time"
             name="dropOffTime"
-            // onChange={handleChange}
+            onChange={handleChange}
             placeholder="Type here"
             className="input input-bordered w-full max-w-lg"
           />
@@ -82,7 +119,7 @@ const Form = ({car}: any) => {
         <input
           type="text"
           placeholder="Type here"
-        //   onChange={handleChange}
+          onChange={handleChange}
           name="contactNumber"
           className="input input-bordered w-full max-w-lg"
         />
@@ -90,9 +127,8 @@ const Form = ({car}: any) => {
       <div className="modal-action">
         <button className="btn">Close</button>
         <button
-          className="btn bg-blue-500 text-white
-hover:bg-blue-800"
-            // onClick={handleSubmit}
+          className="btn bg-blue-500 text-white hover:bg-blue-800"
+            onClick={handleSubmit}
         >
           Save
         </button>
