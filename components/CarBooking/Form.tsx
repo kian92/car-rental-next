@@ -1,6 +1,18 @@
-import React from 'react'
+import { getStoreLocations } from '@/app/services';
+import React, { useEffect, useState } from 'react'
 
 const Form = ({car}: any) => {
+    const [storeLocation, setStoreLocation] = useState<any>([]);
+
+    useEffect(() => {
+        getStoreLocationAPI();
+      }, []);
+
+    const getStoreLocationAPI = async () => {
+        const result: any = await getStoreLocations();
+        setStoreLocation(result?.storesLocations);
+    };
+
   return (
     <div>
       <div className="flex flex-col w-full mb-5">
@@ -13,10 +25,10 @@ const Form = ({car}: any) => {
           <option disabled selected>
             PickUp Location?
           </option>
-          {/* {storeLocation &&
+          {storeLocation &&
             storeLocation.map((loc: any, index: number) => (
               <option key={index}>{loc?.address}</option>
-            ))} */}
+            ))}
         </select>
       </div>
       <div className="flex flec-col gap-5 mb-5">
