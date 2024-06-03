@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 const CarCard = (props: any) => {
-  const [car, setCar] = useState(props.car);
+  const [car, setCar] = useState<any>();
 
-  return (
+  useEffect(() => {
+    if (props.car) {
+      setCar(props.car);
+    }
+  }, [props.car])
+
+  return car && (
     <div
-      className="group bg-gray-50 p-2 sm:p-5 rounded-3xl m-1 sm:m-5
-hover:bg-white 
-hover:border-[1px] cursor-pointer duration-50
-border-blue-500 "
+      className="group bg-gray-50 p-2 sm:p-5 rounded-3xl m-1 sm:m-5 hover:bg-white hover:border-[1px] cursor-pointer duration-50
+border-blue-500"
     >
       <div>
-        <h2 className="text-[20px] font-medium mb-2">{car.name}</h2>
-        <h2 className="text-[20px] font-medium mb-2">{car.price}</h2>
+        <h2 className="text-[20px] font-medium mb-2">{car?.name}</h2>
+        <h2 className="text-[20px] font-medium mb-2">${car?.price}</h2>
         <Image
           src={car?.image?.url}
           alt={car.name}
